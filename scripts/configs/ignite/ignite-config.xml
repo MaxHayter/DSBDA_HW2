@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean class="org.apache.ignite.configuration.IgniteConfiguration">
+        <property name="discoverySpi">
+            <bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi">
+                <property name="ipFinder">
+                    <bean class="org.apache.ignite.spi.discovery.tcp.ipfinder.vm.TcpDiscoveryVmIpFinder">
+                        <property name="addresses">
+                            <list>
+                                <value>127.0.0.1:47500..47510</value>
+                            </list>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+        <property name="cacheConfiguration">
+            <list>
+                <bean class="org.apache.ignite.configuration.CacheConfiguration">
+                    <property name="name" value="interactions"/>
+                    <property name="cacheMode" value="PARTITIONED"/>
+                    <property name="atomicityMode" value="ATOMIC"/>
+                    <property name="queryEntities">
+                        <list>
+                            <bean class="org.apache.ignite.cache.QueryEntity">
+                                <property name="keyType" value="java.util.UUID"/>
+                                <property name="valueType" value="bdtc.Interactions"/>
+                                <property name="tableName" value="Interactions"/>
+                                <property name="fields">
+                                    <map>
+                                        <entry key="newsId" value="java.lang.Long"/>
+                                        <entry key="userId" value="java.lang.Long"/>
+                                        <entry key="timestamp" value="java.time.LocalDateTime"/>
+                                        <entry key="typeId" value="java.lang.Byte"/>
+                                    </map>
+                                </property>
+                            </bean>
+                            <bean class="org.apache.ignite.cache.QueryEntity">
+                                <property name="keyType" value="java.util.UUID"/>
+                                <property name="valueType" value="bdtc.Types"/>
+                                <property name="tableName" value="Types"/>
+                                <property name="fields">
+                                    <map>
+                                        <entry key="type" value="java.lang.Byte"/>
+                                        <entry key="name" value="java.lang.String"/>
+                                    </map>
+                                </property>
+                            </bean>
+                        </list>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+</beans>
